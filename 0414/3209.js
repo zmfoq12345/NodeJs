@@ -5,23 +5,24 @@ var queryString = require('query-string');
 
 http.createServer(function(req, res){
     var _url = req.url.split('?');
-    if(_url[0] == '/html'){
-        fs.readFile('./html','utf-8', function(err, txt){
+    var reqUrl = _url[0]
+    if(reqUrl === '/html'){
+        fs.readFile('./txtFile/html','utf-8', function(err, txt){
             if (err){
                 console.log(err.message);
             }else{
                 res.end(txt);
             }
         });
-    }else if(_url[0] == '/nodejs'){
-        fs.readFile('./nodejs','utf-8', function(err, txt){
+    }else if(reqUrl === '/nodejs'){
+        fs.readFile('./txtFile/nodejs','utf-8', function(err, txt){
             if (err){
                 console.log(err.message);
             }else{
                 res.end(txt);
             }
         });
-    }else if(_url[0] == '/table'){
+    }else if(reqUrl === './txtFile/table'){
         const queryObject = queryString.parse(_url[1]);
         table = ''
         for(i=1;i<=parseInt(queryObject.id);i++){
@@ -38,7 +39,7 @@ http.createServer(function(req, res){
                 </body>
             </html>`)
     }else{
-        fs.readFile('./other','utf-8', function(err, txt){
+        fs.readFile('./txtFile/other','utf-8', function(err, txt){
             if (err){
                 console.log(err.message)
             }else{
