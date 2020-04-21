@@ -1,0 +1,10 @@
+exports.template = ()=>{
+    return `<html>
+    <head>
+    <meta charset='utf-8'>
+    </head>
+    <body>
+    <font size = 7; color = red>HTML PAGE! 안녕하세요 여러분
+    </body>
+    </html>`
+}
