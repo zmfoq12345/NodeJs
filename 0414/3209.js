@@ -14,20 +14,22 @@ http.createServer(function(req, res){
     console.log(query.id); // 쿼리스트링의 데이터
 
     if(path === '/html'){
-        var tempRes = temp.template();
-        
-        res.end(tempRes + query.id);
+        var tempRes = temp.template("html", query);
+
+        res.end(tempRes);
 
     }else if(path === '/nodejs'){
-        fs.readFile('./txtFile/nodejs','utf-8', function(err, txt){
-            if (err){
-                console.log(err.message);
-            }else{
-                res.end(txt);
-            }
-        });
+        var tempRes = temp.template("nodejs", query);
+        
+        res.end(tempRes);
+
+    }else if(path === '/query'){
+        var tempRes = temp.template("query", query);
+        
+        res.end(tempRes);
+
     }else if(path === '/table'){
-        table = ''
+        var table = ''
         for(var i=1;i<=parseInt(query.id);i++){
             table+=`<th>${i}`
         }
@@ -37,12 +39,8 @@ http.createServer(function(req, res){
             </table>
         `)
     }else{
-        fs.readFile('./txtFile/other','utf-8', function(err, txt){
-            if (err){
-                console.log(err.message)
-            }else{
-                res.end(txt);
-            }
-        });
+        var tempRes = temp.template("other", query);
+        
+        res.end(tempRes);
     }
 }).listen(3000);
