@@ -31,7 +31,7 @@ http.createServer(function(req, res){
 
         req.on('end', function(){
             var post = qs.parse(body);
-            console.log(post);
+            console.log(post.text);
         });
         
     }
