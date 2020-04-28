@@ -29,10 +29,7 @@ http.createServer(function(req, res){
         res.end(tempRes);
 
     }else if(path === '/table'){
-        var table = ''
-        for(var i=1;i<=parseInt(query.id);i++){
-            table+=`<th>${i}`
-        }
+        var table = temp.table(parseInt(query.id));
         res.end(`
             <table border=1>
                 ${table}

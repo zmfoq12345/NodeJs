@@ -11,3 +11,11 @@ exports.template = (page, query)=>{
     </body>
     </html>`
 }
+
+exports.table = (data)=>{
+    var txt = ''
+    for(var i=1;i<=data;i++){
+        txt +=`<th>${i}`
+    }
+    return txt;
+}
