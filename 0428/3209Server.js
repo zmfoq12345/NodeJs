@@ -7,23 +7,30 @@ http.createServer(function(req, res){
     var path = url.parse(req.url, true).pathname;
     var query = url.parse(req.url, true).query;
     if (path === '/grade'){
+        console.log('hello!');
         var body = "";
-        req.on('data', function(data){
-            body += data;
-        });
-
-        req.on('end', function(){
-            var post = qs.parse(body);
-            var sum = parseInt(post.html)+parseInt(post.css)+parseInt(post.nodejs)+parseInt(post.android);
+        req.on('end', ()=> {
+            const post = qs.parse(body);
+            let avg = (parseInt(post.html)+parseInt(post.css)+parseInt(post.nodejs)+parseInt(post.android))/4
+            let grade = resAvg(avg)
             res.end(`
-                name:${post.name}
-                html:${post.html}
-                css:${post.css}
-                nodejs:${post.nodejs}
-                android:${post.android}
-                grade:${grade}
-            `);
+            name: ${post.name}
+            html: ${post.html}
+            css: ${post.css}
+            nodejs: ${post.nodejs}
+            android: ${post.android}
+            avg: ${avg}
+            grade: ${grade}`);
         });
         
     }
 }).listen(3001);
+
+resAvg = (avg) =>{
+    if(avg >= 95) return "A+"
+    else if(avg >= 90) return "A"
+    else if(avg >= 85) return "B+"
+    else if(avg >= 80) return "B"
+    else if(avg >= 75) return "C"
+    else return "F"
+}
