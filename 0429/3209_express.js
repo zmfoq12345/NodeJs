@@ -1,8 +1,19 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 
 var port = 3000;
 
+// app.use(function(request, response, next){
+//     console.log("첫 번째 미들웨어")
+// });
+
+// app.use(function(request, response, next){
+//     console.log("두 번째 미들웨어")
+// });
+// 어떤 라우터든 실행을 하면 무조건 동작하는 기능 : 미들웨어
+
+app.use(bodyParser.urlencoded({extended:false}));
 app.get('/', function(request, response){
     response.send('index 페이지..');
 
@@ -53,6 +64,19 @@ app.get('/siteMove', function(request, response){
     if (site == "DAUM") domain = "net";
 
     response.redirect(`https://www.${site}.${domain}`);
+});
+
+app.post('/loginCheck', function(req,res){
+    var id = req.body.id;
+    var pw = req.body.pw;
+    //res.send(`${id}<br>${pw}`);
+
+    console.log(id, pw);
+    if (id === 'smart' && pw ==='123'){
+        res.redirect('http://127.0.0.1:5500/LoginS.html');
+    }else{
+        res.redirect('http://127.0.0.1:5500/LoginF.html');
+    }
 });
 
 app.listen(port, function(){
