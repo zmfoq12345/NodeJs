@@ -70,14 +70,29 @@ app.get('/siteMove', function(request, response){
 app.post('/loginCheck', function(req,res){
     var id = req.body.id;
     var pw = req.body.pw;
-    //res.send(`${id}<br>${pw}`);
 
-    console.log(id, pw);
-    if (id === 'smart' && pw ==='123'){
-        res.redirect('http://127.0.0.1:5500/LoginS.html');
-    }else{
-        res.redirect('http://127.0.0.1:5500/LoginF.html');
-    }
+    var conn = mysql.createConnection({
+        host : 'localhost',
+        user : 'root',
+        password : password,
+        database : 'software'
+    });
+
+    conn.connect();
+    var sql = `select * from software.member where id = ? and pw = ?`;
+    conn.query(sql, [id, pw], function(err, rows){
+        if(!err){
+            if (rows.length != 0){
+                console.log("로그인 성공");
+                res.sendFile(__dirname + "/loginS.html")
+            }else{
+                console.log("로그인 실패");
+                res.sendFile(__dirname + "/loginF.html")  
+            }
+        }else{
+            console.log("ERR실패");
+        }
+    });
 });
 
 app.post('/Join', function(req,res){
@@ -172,6 +187,7 @@ app.post('/OneSelect', function(req,res){
             console.log("검색된 데이터 :", rows);
             for (var i = 0; i< rows.length; i++){
                 console.log(`id :${rows[i].id}\npw :${rows[i].pw}\nname:${rows[i].nickname}`);
+                console.log(`===============`);
             }
         }else{
             console.log(err.message);
