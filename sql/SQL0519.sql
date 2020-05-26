@@ -4,7 +4,6 @@ create table software.member (
     nickname varchar(100) not null
 );
 
-
 SELECT * FROM software.member;
 
 insert into software.member value( "hot", "123", "hotTea");
