@@ -73,12 +73,26 @@ exports.AllSelect = function(req, res){
         if(!err){
             console.log("검색된 데이터 :", rows);
             res.write(`<html>`);
+            res.write(`
+            <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+            </head>`);
             res.write(`<body>`);
+            res.write(`<table border = "1">`);
             for (var i = 0; i< rows.length; i++){
+                res.write(`<tr>`);
+                res.write(`<td>`);
                 //id :${rows[i].id}\npw :${rows[i].pw}\n
-                res.write(`<h2>name${i+1} : ${rows[i].nickname}</h2>`);
+                res.write(`<h2>id${i+1} : ${rows[i].id}`);
+                res.write(`<br>name${i+1} : ${rows[i].nickname}</h2>`);
+                res.write(`</td>`);
+                res.write(`</tr>`);
             }
+            res.write(`</table>`);
             res.write(`</body>`);
+            res.write(`</head>`);
             res.write(`</html>`);
             res.end();
         }else{

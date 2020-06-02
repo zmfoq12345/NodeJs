@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var port = 3000;
 var funcDB = require('./func_database');
+var ejs = require('ejs');
 // app.use(0function(request, response, next){
 //     console.log("첫 번째 미들웨어")
 // });
@@ -14,9 +15,14 @@ var funcDB = require('./func_database');
 
 { // OnlineClass
 app.use(bodyParser.urlencoded({extended:false}));
+app.set("view engine", 'ejs');
+
 app.get('/', function(request, response){
-    response.send('index 페이지..');
+    response.render('index', {
+        num : 5
+    });
 });
+
 app.get('/page', function(request, response){
     response.send(`page 페이지..${request.query.pageNo}`);
 
@@ -75,7 +81,11 @@ app.post('/Update', function(req,res){
 app.post('/AllSelect', function(req,res){
     funcDB.AllSelect(req,res);
 });
-
+app.post('/td', function(req,res){
+    res.render('index', {
+        num : req.body.td
+    });
+});
 
 app.listen(port, function(){
     console.log(`${port}포트로 서버 실행!`);
