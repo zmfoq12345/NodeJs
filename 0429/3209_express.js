@@ -1,9 +1,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var sessionP = require('express-session')
 var app = express();
 var port = 3000;
 var funcDB = require('./func_database');
 var ejs = require('ejs');
+const session = require('express-session');
 // app.use(0function(request, response, next){
 //     console.log("첫 번째 미들웨어")
 // });
@@ -14,11 +16,22 @@ var ejs = require('ejs');
 // 어떤 라우터든 실행을 하면 무조건 동작하는 기능 : 미들웨어
 
 { // OnlineClass
+app.use(sessionP({
+    secret : "3209",  // session 암호키값
+    resave : false,  // session만들때마다 다른 ID값을 부여할건지
+    saveUninitialized : true  // session을 사용할 때만 ID값을 부여
+
+}));
 app.use(bodyParser.urlencoded({extended:false}));
 app.set("view engine", 'ejs');
 
 app.get('/', function(request, response){
-    response.render('index', {
+    request.session.user = {
+        "name" : "json",
+        "age" : "20"
+    }
+    console.log("session 저장 성공");
+    response.render('review', {
         num : 5
     });
 });
@@ -72,18 +85,24 @@ app.post('/loginCheck', function(req,res){
 app.post('/Join', function(req,res){
     funcDB.join(req,res);
 });
-app.post('/Delete', function(req,res){
+app.get('/Delete', function(req,res){
     funcDB.Delete(req,res);
 });
 app.post('/Update', function(req,res){
     funcDB.Update(req,res);
 });
-app.post('/AllSelect', function(req,res){
+app.get('/AllSelect', function(req,res){
+    console.log(req.session.user.name);
     funcDB.AllSelect(req,res);
 });
 app.post('/td', function(req,res){
     res.render('index', {
         num : req.body.td
+    });
+});
+
+app.get('/mail', function(req,res){
+    res.render('mail', {
     });
 });
 

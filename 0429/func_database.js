@@ -8,10 +8,14 @@ exports.loginCheck = function(req, res){
         if(!err){
             if (rows.length != 0){
                 console.log("로그인 성공");
-                res.sendFile(__dirname + "/loginS.html")
+                res.render('LoginS', {
+                    send_id : id
+                });
             }else{
                 console.log("로그인 실패");
-                res.sendFile(__dirname + "/loginF.html")  
+                res.render('LoginF', {
+                    send_id : id
+                });  
             }
         }else{
             console.log("ERR실패");
@@ -37,7 +41,7 @@ exports.join = function(req, res){
     res.send("완료");   
 };
 exports.Delete = function(req, res){
-    var id = req.body.id;
+    var id = req.query.id;
     var sql = `delete from software.member where id = ?`;
     console.log(`id :${id}`);
     conn.query(sql, [id], function(err, rows){
@@ -45,10 +49,10 @@ exports.Delete = function(req, res){
             console.log("삭제 성공");
         }else{
             console.log(err.message);
-            console.log("삭제 실패");       
+            console.log("삭제 실패");    
         }
+        res.redirect('http://localhost:3000/AllSelect');
     });
-    res.send("완료"); 
 };
 exports.Update = function(req, res){
     var id = req.body.id;
@@ -66,35 +70,43 @@ exports.Update = function(req, res){
     res.send("완료"); 
 };
 exports.AllSelect = function(req, res){
-    var id = req.body.id;
     var conn = require('./config_database.js');
     var sql = `select * from software.member`;// where id = ?`;
-    conn.query(sql, [id], function(err, rows){
+    conn.query(sql, function(err, rows){
         if(!err){
-            console.log("검색된 데이터 :", rows);
-            res.write(`<html>`);
-            res.write(`
-            <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Document</title>
-            </head>`);
-            res.write(`<body>`);
-            res.write(`<table border = "1">`);
-            for (var i = 0; i< rows.length; i++){
-                res.write(`<tr>`);
-                res.write(`<td>`);
-                //id :${rows[i].id}\npw :${rows[i].pw}\n
-                res.write(`<h2>id${i+1} : ${rows[i].id}`);
-                res.write(`<br>name${i+1} : ${rows[i].nickname}</h2>`);
-                res.write(`</td>`);
-                res.write(`</tr>`);
-            }
-            res.write(`</table>`);
-            res.write(`</body>`);
-            res.write(`</head>`);
-            res.write(`</html>`);
-            res.end();
+            res.render('AllSelect', {
+                rows : rows,
+                user : req.session.user
+            })
+            // console.log("검색된 데이터 :", rows);
+            // res.write(`<html>`);
+            // res.write(`
+            // <head>
+            // <meta charset="UTF-8">
+            // <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            // <title>Document</title>
+            // </head>`);
+            // res.write(`<body>`);
+            // res.write(`<table border = "1">`);
+            // for (var i = 0; i< rows.length; i++){
+            //     res.write(`<tr>`);
+            //     res.write(`<td>`);
+            //     res.write(`${i+1}`);
+            //     res.write(`</td>`);
+            //     res.write(`<td>`);
+            //     //id :${rows[i].id}\npw :${rows[i].pw}\n
+            //     res.write(`${rows[i].id}`);
+            //     res.write(`</td>`);
+            //     res.write(`<td>`);
+            //     res.write(`${rows[i].nickname}`);
+            //     res.write(`</td>`);
+            //     res.write(`</tr>`);
+            // }
+            // res.write(`</table>`);
+            // res.write(`</body>`);
+            // res.write(`</head>`);
+            // res.write(`</html>`);
+            // res.end();
         }else{
             console.log(err.message);
             console.log("검색 실패");       
