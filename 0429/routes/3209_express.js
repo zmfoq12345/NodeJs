@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var sessionP = require('express-session')
 var app = express();
 var port = 3000;
-var funcDB = require('./func_database');
+var funcDB = require('../conf/func_database');
 var ejs = require('ejs');
 const session = require('express-session');
 // app.use(0function(request, response, next){
@@ -23,6 +23,8 @@ app.use(sessionP({
 
 }));
 app.use(bodyParser.urlencoded({extended:false}));
+app.set("views", '../views');
+app.use(express.static('../public'));
 app.set("view engine", 'ejs');
 
 app.get('/', function(request, response){
@@ -95,6 +97,28 @@ app.get('/AllSelect', function(req,res){
     console.log(req.session.user.name);
     funcDB.AllSelect(req,res);
 });
+app.get('/Login', function(req,res){
+    if (req.session.user){
+        res.render('Login', {
+            user : req.session.user
+        });
+    }else{
+        res.render('Login', {
+            user : null
+        });
+    }
+});
+app.get('/Logout', function(req,res){
+    delete req.session.user;
+    res.redirect('http://localhost:3000/Message');
+});
+
+app.get('/Message', function(req,res){
+    res.render('message', {
+        user : null
+    });
+});
+
 app.post('/td', function(req,res){
     res.render('index', {
         num : req.body.td
