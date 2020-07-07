@@ -93,6 +93,11 @@ app.get('/Delete', function(req,res){
 app.post('/Update', function(req,res){
     funcDB.Update(req,res);
 });
+app.get('/updatepage', function(req,res){
+    res.render('update',{
+        user:req.session.user
+    })
+});
 app.get('/AllSelect', function(req,res){
     console.log(req.session.user.name);
     funcDB.AllSelect(req,res);

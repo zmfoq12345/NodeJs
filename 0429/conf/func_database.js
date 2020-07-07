@@ -69,19 +69,28 @@ exports.Delete = function(req, res){
     });
 };
 exports.Update = function(req, res){
-    var id = req.body.id;
     var pw = req.body.pw;
-    var sql = `update software.member set pw = ? where id = ?`;
-    console.log(`id :${id}pw :${pw}`);
-    // conn.query(sql, [pw, id], function(err, rows){
-    //     if(!err){
-    //         console.log("수정 성공");
-    //     }else{
-    //         console.log(err.message);
-    //         console.log("수정 실패");       
-    //     }
-    // });
-    res.send("완료"); 
+    var tel = req.body.tel;
+    var addr = req.body.address;
+    var sql = `update software.web_member set pw = ?, tel = ?, address = ? where email = ?`;
+    conn.query(sql, [pw, tel, addr, req.session.user.email], function(err, rows){
+        if(!err){
+            req.session.user = {
+                email : req.session.user.email,
+                pw : pw,
+                tel : tel,
+                address : addr
+            }
+            console.log("수정 성공");
+        
+        }else{
+            console.log(err.message);
+            console.log("수정 실패");       
+        }
+    });
+    res.render('Message', {
+        user : req.session.user
+    });
 };
 exports.AllSelect = function(req, res){
     var conn = require('./config_database.js');
