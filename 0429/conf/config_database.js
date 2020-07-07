@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 {
-    var password = "zotb1026!!";
+    var password = "";
 }
 
 var conn = mysql.createConnection({
